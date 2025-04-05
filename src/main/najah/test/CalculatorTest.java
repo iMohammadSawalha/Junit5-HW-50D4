@@ -10,7 +10,10 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
@@ -20,6 +23,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import main.najah.code.Calculator;
 
+@TestMethodOrder(OrderAnnotation.class)
 @DisplayName("Calculator Tests")
 @Execution(ExecutionMode.CONCURRENT)
 public class CalculatorTest {
@@ -38,14 +42,16 @@ public class CalculatorTest {
 
 	// * Addition Tests
 
+	@Order(1)
 	@ParameterizedTest
 	@MethodSource("positiveAdditionTestCases")
-	@DisplayName("Test addition with multiple positive numbers (parameterized)")
+	@DisplayName("Test addition with multiple positive numbers")
 	void testAdditionMultiplePositive(int[] numbers, int expected) {
 		int result = calc.add(numbers);
 		assertEquals(expected, result);
 	}
 
+	@Order(2)
 	@Test
 	@DisplayName("Test addition with all negative numbers")
 	void testAdditionAllNegative() {
@@ -55,6 +61,7 @@ public class CalculatorTest {
 		assertEquals(expected, result);
 	}
 
+	@Order(3)
 	@Test
 	@DisplayName("Test addition with a mix of positive and negative numbers")
 	void testAdditionMixedNumbers() {
@@ -64,6 +71,7 @@ public class CalculatorTest {
 		assertEquals(expected, result);
 	}
 
+	@Order(4)
 	@Test
 	@DisplayName("Test addition with a single number")
 	void testAdditionSingleNumber() {
@@ -73,6 +81,7 @@ public class CalculatorTest {
 		assertEquals(expected, result);
 	}
 
+	@Order(5)
 	@Test
 	@DisplayName("Test addition with a large number of arguments")
 	@Timeout(value = 100, unit = TimeUnit.MILLISECONDS)
@@ -83,6 +92,7 @@ public class CalculatorTest {
 		assertEquals(expected, result);
 	}
 
+	@Order(6)
 	@Test
 	@DisplayName("Test addition with arguments that pass the int limit when summed")
 	@Timeout(value = 100, unit = TimeUnit.MILLISECONDS)
@@ -96,6 +106,7 @@ public class CalculatorTest {
 
 	// * Division Tests
 
+	@Order(7)
 	@ParameterizedTest(name = "{index} => a={0}, b={1}, expected={2}")
 	@DisplayName("Test division with normal cases, (positive/negative cases)")
 	@CsvSource({ "10, 2, 5", "9, 3, 3", "7, 2, 3", "-10, 2, -5", "10, -2, -5", "-10, -2, 5" })
@@ -103,6 +114,7 @@ public class CalculatorTest {
 		assertEquals(expected, this.calc.divide(a, b));
 	}
 
+	@Order(8)
 	@Test
 	@DisplayName("Test division by zero throws ArithmeticException")
 	void testDivideByZero() {
@@ -111,18 +123,21 @@ public class CalculatorTest {
 
 	// * Factorial Tests
 
+	@Order(9)
 	@Test
 	@DisplayName("Test factorial of 0 returns 1")
 	void testFactorialZero() {
 		assertEquals(1, this.calc.factorial(0));
 	}
 
+	@Order(10)
 	@Test
 	@DisplayName("Test factorial with negative input throws IllegalArgumentException")
 	void testFactorialNegative() {
 		assertThrows(IllegalArgumentException.class, () -> this.calc.factorial(-1));
 	}
 
+	@Order(11)
 	@ParameterizedTest(name = "{index} => n={0}, expected={1}")
 	@DisplayName("Parameterized test for factorial values")
 	@CsvSource({ "0, 1", "1, 1", "2, 2", "3, 6", "4, 24", "5, 120" })
